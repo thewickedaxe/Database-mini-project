@@ -16,11 +16,11 @@ for datum in data:
 '''
 
 def query1(x,y,intime):
-	Mindistance = 100000
+	Mindistance = 1000000000000000000
 	for datum in data:
 		val1 = (datum["geometry"]["coordinates"][0])
 		val2 = (datum["geometry"]["coordinates"][1])
-		Distance = math.sqrt((x-val1)*(x-val1) + (y-val2)*(y-val2))
+		Distance = math.sqrt((x-val1)*(x-val1) + (y-val2)*(y-val2))*100000000000
 		if Distance < Mindistance:
 			Mindistance = Distance
 			Stationname= datum["properties"]["name"]
@@ -30,7 +30,7 @@ def query1(x,y,intime):
 			Currenttime = datetime.datetime.strptime(intime, '%H:%M:%S')
 			Opentime = datetime.datetime.strptime(val1, '%H:%M:%S')
 			Closetime = datetime.datetime.strptime(val2, '%H:%M:%S')
-			if (Currenttime > Opentime) and (Currenttime < Opentime): 
+			if (Currenttime > Opentime) and (Currenttime < Closetime): 
 				status = "Open"
 			else :
 				status = "Closed"
@@ -38,7 +38,7 @@ def query1(x,y,intime):
 	print Stationname + " at " + Stationstreet + " is " + status
 	return
 
-#query1(39.94295,-75.18034,"23:52:00")
+query1(39.94061,-75.14958,"23:51:00")
 
 def query2(x,y):
 	Mindistance = 100000
@@ -164,7 +164,7 @@ def query10(x,y,intime):
 	print Stationname + " at " +  Stationstreet
 	return
 
-query10(39.94061,-75.14958,"23:54:00")
+#query10(39.94061,-75.14958,"23:54:00")
 
 
 def query12(station):
