@@ -12,6 +12,7 @@ def parse_cmd_args():
     global args
     parser = argparse.ArgumentParser(description="""
 All indicated required arguments to be provided via -<argname> -value
+eg: python main.py -q 1 -75 -y 39 -t 04:04:04
 Q1: Is the closest bike station open? [-x, -y, -t]
 Q2: Till what time is the closet bike station open? [-x and -y]
 Q3: Where can I get a bike at this time? [-t]
