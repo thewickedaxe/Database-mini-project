@@ -16,11 +16,11 @@ for datum in data:
 '''
 
 def query1(x,y,intime):
-	Mindistance = 1000000000000000000
+	Mindistance = 100000
 	for datum in data:
-		val1 = (datum["geometry"]["coordinates"][0])
-		val2 = (datum["geometry"]["coordinates"][1])
-		Distance = math.sqrt((x-val1)*(x-val1) + (y-val2)*(y-val2))*100000000000
+		val1 = float(datum["geometry"]["coordinates"][0])
+		val2 = float(datum["geometry"]["coordinates"][1])
+		Distance = math.sqrt((x-val1)*(x-val1) + (y-val2)*(y-val2))
 		if Distance < Mindistance:
 			Mindistance = Distance
 			Stationname= datum["properties"]["name"]
@@ -38,7 +38,7 @@ def query1(x,y,intime):
 	print Stationname + " at " + Stationstreet + " is " + status
 	return
 
-query1(39.94061,-75.14958,"23:51:00")
+#query1(-75.15993,39.94517,"23:51:00")
 
 def query2(x,y):
 	Mindistance = 100000
@@ -93,7 +93,7 @@ def query5(x,y):
 	print a + " is the closest station which is virtual"
 	return
 
-#query5(39.94295,-75.18034)
+#query5(-75.15993,39.94517)
 
 def query6(x,y):
 	for datum in data:
@@ -107,7 +107,7 @@ def query6(x,y):
 	print a + " at " + b 
 	return
 
-#query6(39.94295,-75.18034)
+#query6(-75.15993,39.94517)
 	
 
 def query7(station):
@@ -164,8 +164,33 @@ def query10(x,y,intime):
 	print Stationname + " at " +  Stationstreet
 	return
 
-#query10(39.94061,-75.14958,"23:54:00")
+#query10(-75.17747,39.94218,"23:54:00")
 
+
+def query11(x,y,intime):
+	Mindistance = 100000
+	for datum in data:
+		val1 = (datum["geometry"]["coordinates"][0])
+		val2 = (datum["geometry"]["coordinates"][1])
+		t1 = (datum["properties"]["openTime"])
+		t2 = (datum["properties"]["closeTime"])
+		Opentime = datetime.datetime.strptime(t1, '%H:%M:%S')
+		Closetime = datetime.datetime.strptime(t2, '%H:%M:%S')
+		Currenttime = datetime.datetime.strptime(intime, '%H:%M:%S')
+		Distance = math.sqrt((x-val1)*(x-val1) + (y-val2)*(y-val2))
+		if Distance < Mindistance:
+			Mindistance = Distance
+			Stationname= datum["properties"]["name"]
+			Stationstreet=datum["properties"]["addressStreet"]
+			if ((Currenttime > Opentime) and (Currenttime < Closetime)) and datum["properties"]["docksAvailable"]>0:
+				status="Yes, you can leave your bike at "
+			else:
+				status="No, you cannot leave your bike at "
+
+	print status + Stationname + " at " +  Stationstreet
+	return
+
+#query11(-75.17747,39.94218,"23:54:00")
 
 def query12(station):
 	for datum in data:
@@ -177,6 +202,34 @@ def query12(station):
 
 #query12("38th & Lancaster")
 
+def query13():
+	for datum in data:
+		if str(datum["properties"]["isEventBased"]) == "True":
+			print str(datum["properties"]["name"])
+	return
 
-#40th and spruce
+#query13()
 
+def query14():
+	for datum in data:
+		if str(datum["properties"]["isEventBased"]) == "True":
+			print str(datum["properties"]["name"]) + " hosts an event from " + str(datum["properties"]["eventStart"]) + " to " + str(datum["properties"]["eventEnd"])
+	return
+
+#query14()
+
+
+def query15(x,y,n):
+	Mindistance = 100000
+	for datum in data:
+		val1 = (datum["geometry"]["coordinates"][0])
+		val2 = (datum["geometry"]["coordinates"][1])
+		Distance = math.sqrt((x-val1)*(x-val1) + (y-val2)*(y-val2))
+		if Distance < Mindistance and datum["properties"]["bikesAvailable"]> n:
+			Mindistance = Distance
+			Stationname= datum["properties"]["name"]
+			Stationstreet=datum["properties"]["addressStreet"]
+	print Stationname + " at " +  Stationstreet
+	return
+
+#query15(-75.19701,39.96046,7)
