@@ -30,7 +30,7 @@ Q14: When and where in the bike stations are the events scheduled?
 Q15: Neasrest station with more than 5 bikes?
 -----
 Q16: Natural Language option for Queries [12, 9, 7]
-Just say "Run Protocol <query name> <part_of_station_name>"
+Just say "<query number> <part_of_station_name>"
 Eg: "12 Pine => would print when the station at Pine opens
 -----
 """, formatter_class=RawTextHelpFormatter)    
