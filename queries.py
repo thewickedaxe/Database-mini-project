@@ -2,13 +2,11 @@ from dbhelper import DBHelper
 import datetime
 import math
 
-dbh = DBHelper()
-data = dbh.get_data()
-print "here"
-
 # Query for Is the closest bike station open?
 # x,y are the GPS coordinates, while time is the current time.
 def query1(x,y,intime):	
+	dbh = DBHelper()
+	data = dbh.get_data()
 	Mindistance = 10000000
 	e=0
 # Iterates over the database one object at a time.
@@ -47,6 +45,8 @@ def query1(x,y,intime):
 # Till what time is the closet bike station open?
 # x and y are the GPS coordinates
 def query2(x,y):
+	dbh = DBHelper()
+	data = dbh.get_data()
 	Mindistance = 100000
 	e=0
 	# Iterates over the database one object at a time.
@@ -74,6 +74,8 @@ def query2(x,y):
 #1.	Where can I get a bike at this time?
 # Takes in time as an input and returns the list of stations open
 def query3(intime):
+	dbh = DBHelper()
+	data = dbh.get_data()
 	for datum in data:
 		# Val1 and Val 2 are assigned the opening and closing times of the station respectively
 		val1 = (datum["properties"]["openTime"])
@@ -94,12 +96,15 @@ def query3(intime):
 # How many bikes are available at _____ station? 
 # Takes in the name of the station as input and returns the number of bikes
 def query4(station):
+	dbh = DBHelper()
+	data = dbh.get_data()
 	e=0
 	for datum in data:
 		val1 = (datum["properties"]["name"])
-		if val1 == station :
+		if station.lower() in val1.lower():
 			e=1
-			print datum["properties"]["bikesAvailable"]
+			print val1
+			print "Bikes available: " + str(datum["properties"]["bikesAvailable"]) + "\n"
 	if e==0:
 		print "Please enter a valid station name"
 	return
@@ -109,6 +114,8 @@ def query4(station):
 #Are there any virtual stations nearby for me to book a ride?
 # Input x and y coordinates. Outputs the closest virtual station
 def query5(x,y):
+	dbh = DBHelper()
+	data = dbh.get_data()
 	e=0
 	Maxdistance = 10000
 	for datum in data:
@@ -132,6 +139,8 @@ def query5(x,y):
 #Which is the closest station that has a trike?
 # Input GPS coordinates. Outputs the closest station name and address which has a trike
 def query6(x,y):
+	dbh = DBHelper()
+	data = dbh.get_data()
 	e=0
 	for datum in data:
 		Mindistance = 100000
@@ -155,18 +164,19 @@ def query6(x,y):
 # Can I drop of a trike at _____ station?
 # Input a station name. Outputs a yes or no.
 def query7(station):
+	dbh = DBHelper()
+	data = dbh.get_data()
 	e=0
 	for datum in data:
 		val1 = str(datum["properties"]["name"])
 		# Checks for the particular station
-		if val1 == station:
+		if station.lower() in val1.lower():
 			e=1
 			if (datum["properties"]["docksAvailable"]>0):
-				print "Yes you can leave your bike at " + station
-			else :
-				print "Sorry no docks available at the moment. Please wait for a while try another station"
+				print "Yes you can leave your bike at " + str(datum["properties"]["name"])
+				return				
 	if e==0:
-		print "Please enter a valid station name"
+		print "Sorry no docks available at the moment near that place. Please wait for a while try another station"
 	return
 
 #query7("38th & Lancaster")
@@ -174,6 +184,8 @@ def query7(station):
 #Which stations have trikes?
 # Input not needed, Outputs a list of all stations that have trikes.
 def query8():
+	dbh = DBHelper()
+	data = dbh.get_data()
 	e=0
 	print "Trikes are available at these stations - "
 	for datum in data:
@@ -189,9 +201,11 @@ def query8():
 #Is _____ station a public station?
 # Input a stations name. Outputs if the station is available for public use>
 def query9(station):
+	dbh = DBHelper()
+	data = dbh.get_data()
 	e=0
 	for datum in data:
-		if str(datum["properties"]["name"])==station:
+		if station.lower() in str(datum["properties"]["name"]).lower():
 			e=1
 			if str(datum["properties"]["kioskPublicStatus"]) == "Active" :
 				print "Yes. " + str(datum["properties"]["name"]) + " is public."
@@ -206,6 +220,8 @@ def query9(station):
 # Where can I leave a bike?
 # Input the GPS coordinates and the current time. 
 def query10(x,y,intime):
+	dbh = DBHelper()
+	data = dbh.get_data()
  	Mindistance = 100000
  	e=0
 	for datum in data:
@@ -238,6 +254,8 @@ def query10(x,y,intime):
 #Can I leave my bike at the closest station?
 # Inputs x, y and current time. Returns a yes or a no.
 def query11(x,y,intime):
+	dbh = DBHelper()
+	data = dbh.get_data()
 	Mindistance = 100000
 	e=0
 	for datum in data:
@@ -274,9 +292,11 @@ def query11(x,y,intime):
 # What time does _____ station open?
 # Inputs station name. Returns the opening time
 def query12(station):
+	dbh = DBHelper()
+	data = dbh.get_data()
 	e=0
 	for datum in data:
-		if str(datum["properties"]["name"])==station:
+		if station.lower() in str(datum["properties"]["name"]).lower():
 			e=1
 			Opentime = (datum["properties"]["openTime"])
 			print  str(datum["properties"]["name"]) + " opens at " + str(Opentime) 
@@ -286,9 +306,11 @@ def query12(station):
 
 #query12("38th & Lancaster")
 
-#What are the events planned for penn station?
+#What are the events stations?
 #Input nothing. Outputs a list of event based stations
 def query13():
+	dbh = DBHelper()
+	data = dbh.get_data()
 	for datum in data:
 		if str(datum["properties"]["isEventBased"]) == "True":
 			print str(datum["properties"]["name"])
@@ -299,6 +321,8 @@ def query13():
 #When and where in the bike stations are the events scheduled?
 #Input nothing. Outputs the list of Events.
 def query14():
+	dbh = DBHelper()
+	data = dbh.get_data()
 	for datum in data:
 		if str(datum["properties"]["isEventBased"]) == "True":
 			print str(datum["properties"]["name"]) + " hosts an event from " + str(datum["properties"]["eventStart"]) + " to " + str(datum["properties"]["eventEnd"])
@@ -309,6 +333,8 @@ def query14():
 #Which is the closest station which has more than 5 bikes?
 # Input as the GPS coordinates and number of bikes. Returns the closest station.
 def query15(x,y,n):
+	dbh = DBHelper()
+	data = dbh.get_data()
 	Mindistance = 100000
 	e=0
 	for datum in data:
@@ -328,4 +354,4 @@ def query15(x,y,n):
 		print "No stations in the vicinity with " + str(n) + " bikes."
 	return
 
-query15(-75.19701,39.96046,7)
+#query15(-75.19701,39.96046,7)
